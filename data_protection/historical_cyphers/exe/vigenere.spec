@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['vigenere.py'],
-             pathex=['/home/sleter/Documents/Github/pen-testing/data_protection/historical_cyphers/exe'],
+             pathex=['C:\\Users\\slete\\Documents\\Github\\pen-testing\\data_protection\\historical_cyphers\\exe'],
              binaries=[],
              datas=[],
              hiddenimports=[],
