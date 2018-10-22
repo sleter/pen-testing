@@ -49,11 +49,6 @@ def bits_to_string(b):
                     for i in range(0, len(b), ASCII_BITS)])
 
 def pad_bits_append(small, size):
-    # as mentioned in lecture, simply padding with
-    # zeros is not a robust way way of padding
-    # as there is no way of knowing the actual length
-    # of the file, but this is good enough
-    # for the purpose of this exercise
     diff = max(0, size - len(small))
     return small + [0] * diff
 
@@ -67,6 +62,15 @@ def aes_encoder(block, key):
     key = bits_to_string(key)
     ecb = AES.new(key, AES.MODE_ECB)
     return string_to_bits(ecb.encrypt(block))
+
+def aes_encoder2(block, key):
+    block = pad_bits_append(block, len(key))
+    # the pycrypto library expects the key and block in 8 bit ascii 
+    # encoded strings so we have to convert from the bit string
+    block = bits_to_string(block)
+    key = bits_to_string(key)
+    ecb = AES.new(key, AES.MODE_ECB)
+    return string_to_bits(ecb.decrypt(block))
 
 def cipher_block_chaining(plaintext, key, init_vec, block_size, block_enc):
     """Return the cbc encoding of `plaintext`
@@ -99,6 +103,23 @@ def cipher_block_chaining(plaintext, key, init_vec, block_size, block_enc):
         cipher.extend(output)
     return cipher
 
+def de_cipher_block_chaining(plaintext, key, init_vec, block_size, block_enc):
+    def xor(x, y):
+        return [xx ^ yy for xx, yy in zip(x, y)]
+    cipher = []
+    xor_in = init_vec
+    for i in range(len(plaintext) / block_size+1):
+        start = i* block_size
+        if start >= len(plaintext):
+            break
+        end = min(len(plaintext), (i+1)*block_size)
+        block = plaintext[start:end]
+        output = block_enc(block, key)
+        input_ = xor(xor_in, output)
+        xor_in = output
+        cipher.extend(input_)
+    return cipher
+
 def main():
     key = string_to_bits('Ft7*%78jkQ1!9t%3')
     iv = string_to_bits('98tRszyfr&^^%$7D')
@@ -107,6 +128,8 @@ def main():
     cipher = cipher_block_chaining(plaintext, key, iv, 128, aes_encoder)
     print "input_vec_len: "+str(len(iv))+"\nplaintext_len: "+str(len(plaintext))+"\ncipher_len: "+str(len(cipher))
     print display_bits(cipher)
+    dc = de_cipher_block_chaining(cipher,key,iv,128,aes_encoder2)
+    print bits_to_string(dc)
     
 
 if __name__ == "__main__":
