@@ -1,6 +1,5 @@
 from Crypto.Cipher import AES
-
-# additional fuctions
+import time
 
 BITS = ('0', '1')
 ASCII_BITS = 8
@@ -73,20 +72,6 @@ def aes_encoder2(block, key):
     return string_to_bits(ecb.decrypt(block))
 
 def cipher_block_chaining(plaintext, key, init_vec, block_size, block_enc):
-    """Return the cbc encoding of `plaintext`
-    
-    Args:
-        plaintext: bits to be encoded
-        key: bits used as key for the block encoder
-        init_vec: bits used as the initalization vector for 
-                  the block encoder
-        block_size: size of the block used by `block_enc`
-        block_enc: function that encodes a block using `key`
-    """
-    # Assume `block_enc` takes care of the necessary padding
-    # if `plaintext` is not a full block
-    
-    # return a bit array, something of the form: [0, 1, 1, 1, 0]
     def xor(x, y):
         return [xx ^ yy for xx, yy in zip(x, y)]
     cipher = []
@@ -120,16 +105,33 @@ def de_cipher_block_chaining(plaintext, key, init_vec, block_size, block_enc):
         cipher.extend(input_)
     return cipher
 
+
+def aes_ecb_encoder(plaintext, key):
+    ecb = AES.new(key, AES.MODE_ECB)
+    return string_to_bits(ecb.encrypt(plaintext))
+
 def main():
     key = string_to_bits('Ft7*%78jkQ1!9t%3')
     iv = string_to_bits('98tRszyfr&^^%$7D')
-    plaintext = string_to_bits("TRALALALALALALALA")
+    text = "TRALALALA1234567"
 
+    plaintext = string_to_bits(text*100000)
+
+    
+    start_time = time.time()
     cipher = cipher_block_chaining(plaintext, key, iv, 128, aes_encoder)
-    print "input_vec_len: "+str(len(iv))+"\nplaintext_len: "+str(len(plaintext))+"\ncipher_len: "+str(len(cipher))
-    print display_bits(cipher)
-    dc = de_cipher_block_chaining(cipher,key,iv,128,aes_encoder2)
-    print bits_to_string(dc)
+    elapsed_time = time.time() - start_time
+    print "CBC time: "+str(elapsed_time)
+
+    start_time = time.time()
+    cipher2 = aes_ecb_encoder(bits_to_string(plaintext), bits_to_string(key))
+    elapsed_time = time.time() - start_time
+    print "ECB time: "+str(elapsed_time)
+
+    # print "input_vec_len: "+str(len(iv))+"\nplaintext_len: "+str(len(plaintext))+"\ncipher_len: "+str(len(cipher))
+    # print display_bits(cipher)
+    # dc = de_cipher_block_chaining(cipher, key, iv, 128, aes_encoder2)
+    # print bits_to_string(dc)
     
 
 if __name__ == "__main__":

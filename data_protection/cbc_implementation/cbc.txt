@@ -1,0 +1,4 @@
+- czas pracy szyfrowania/deszyfrowania
+- czas pracy szyfrowania/deszyfrowania ECB - CBC
+- czas szyfru różnej długości pliku
+- uszkodzić jeden bit w szyfrogramie jak ten błąd będzie się propagował
