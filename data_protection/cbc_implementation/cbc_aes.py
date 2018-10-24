@@ -115,23 +115,28 @@ def main():
     iv = string_to_bits('98tRszyfr&^^%$7D')
     text = "TRALALALA1234567"
 
-    plaintext = string_to_bits(text*100000)
+    # plaintext = string_to_bits(text*100000)
+    # start_time = time.time()
+    # cipher = cipher_block_chaining(plaintext, key, iv, 128, aes_encoder)
+    # elapsed_time = time.time() - start_time
+    # print "CBC time: "+str(elapsed_time)
 
-    
-    start_time = time.time()
+    # start_time = time.time()
+    # cipher2 = aes_ecb_encoder(bits_to_string(plaintext), bits_to_string(key))
+    # elapsed_time = time.time() - start_time
+    # print "ECB time: "+str(elapsed_time)
+
+    plaintext = string_to_bits(text)
+
     cipher = cipher_block_chaining(plaintext, key, iv, 128, aes_encoder)
-    elapsed_time = time.time() - start_time
-    print "CBC time: "+str(elapsed_time)
+    print "input_vec_len: "+str(len(iv))+"\nplaintext_len: "+str(len(plaintext))+"\ncipher_len: "+str(len(cipher))
+    print display_bits(cipher)
 
-    start_time = time.time()
-    cipher2 = aes_ecb_encoder(bits_to_string(plaintext), bits_to_string(key))
-    elapsed_time = time.time() - start_time
-    print "ECB time: "+str(elapsed_time)
+    # uszkodzenie bitu
+    cipher[1]=1
 
-    # print "input_vec_len: "+str(len(iv))+"\nplaintext_len: "+str(len(plaintext))+"\ncipher_len: "+str(len(cipher))
-    # print display_bits(cipher)
-    # dc = de_cipher_block_chaining(cipher, key, iv, 128, aes_encoder2)
-    # print bits_to_string(dc)
+    dc = de_cipher_block_chaining(cipher, key, iv, 128, aes_encoder2)
+    print bits_to_string(dc)
     
 
 if __name__ == "__main__":
