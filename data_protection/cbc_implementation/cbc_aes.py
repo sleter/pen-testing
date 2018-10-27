@@ -110,33 +110,40 @@ def aes_ecb_encoder(plaintext, key):
     ecb = AES.new(key, AES.MODE_ECB)
     return string_to_bits(ecb.encrypt(plaintext))
 
+def aes_ecb_decoder(cipher, key):
+    ecb = AES.new(key, AES.MODE_ECB)
+    return string_to_bits(ecb.decrypt(cipher))
+
 def main():
     key = string_to_bits('Ft7*%78jkQ1!9t%3')
     iv = string_to_bits('98tRszyfr&^^%$7D')
     text = "TRALALALA1234567"
 
     # plaintext = string_to_bits(text*100000)
-    # start_time = time.time()
+    # plaintext = string_to_bits(text)
+    
     # cipher = cipher_block_chaining(plaintext, key, iv, 128, aes_encoder)
+    # start_time = time.time()   
+    # dc = de_cipher_block_chaining(cipher, key, iv, 128, aes_encoder2)
     # elapsed_time = time.time() - start_time
-    # print "CBC time: "+str(elapsed_time)
+    # print "CBC (decipher) time: "+str(elapsed_time)
 
-    # start_time = time.time()
     # cipher2 = aes_ecb_encoder(bits_to_string(plaintext), bits_to_string(key))
+    # start_time = time.time()
+    # dce = aes_ecb_decoder(bits_to_string(cipher2), bits_to_string(key))
     # elapsed_time = time.time() - start_time
-    # print "ECB time: "+str(elapsed_time)
+    # print "ECB (decipher) time: "+str(elapsed_time)
+    
 
     plaintext = string_to_bits(text)
 
     cipher = cipher_block_chaining(plaintext, key, iv, 128, aes_encoder)
-    print "input_vec_len: "+str(len(iv))+"\nplaintext_len: "+str(len(plaintext))+"\ncipher_len: "+str(len(cipher))
-    print display_bits(cipher)
+    print "Ciphertext (bits): \n"+display_bits(cipher)
 
-    # uszkodzenie bitu
-    cipher[1]=1
+    cipher[0] = 0
 
     dc = de_cipher_block_chaining(cipher, key, iv, 128, aes_encoder2)
-    print bits_to_string(dc)
+    print "Plaintext (deciphered): "+bits_to_string(dc)
     
 
 if __name__ == "__main__":
