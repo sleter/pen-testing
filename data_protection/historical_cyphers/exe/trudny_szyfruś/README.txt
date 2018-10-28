@@ -1,0 +1,1 @@
+stwórz plik input.txt - uruchom exe - utworzy siê zaszyfrowana wiadomoœæ w pliku output.txt
