@@ -1,5 +1,6 @@
 from miller_rabin_pt import probablyPrime
 from fractions import gcd
+from itertools import count
 
 class RSA():
     def __init__(self, p, q):
@@ -13,7 +14,7 @@ class RSA():
         phi = (self.p-1)*(self.q-1)
         print("phi = {}".format(phi))
         self.e=None
-        for i in range(2,1001):
+        for i in count():
             if probablyPrime(i, accuracy=100) and gcd(phi, i) == 1:
                 self.e = i
                 break
@@ -21,7 +22,7 @@ class RSA():
                 continue
         print("e = {}".format(self.e))
         self.d = None
-        for i in range(1,1001):
+        for i in count():
             if (self.e*i -1) % phi == 0:
                 self.d = i
                 break
@@ -31,17 +32,19 @@ class RSA():
 
     def cipher(self, m):
         print("------------------------cipher")
-        return m ** self.e % self.n
+        ascii_t = [ord(i) for i in m]
+        return [item ** self.e % self.n for item in ascii_t]
     
     def decipher(self, c):
         print("------------------------decipher")
-        return c ** self.d % self.n
+        out = [item ** self.d % self.n for item in c]
+        return ''.join(chr(i) for i in out)
 
-        
-        
-        
-r = RSA(31, 19)
+
+r = RSA(1031, 2029)
 r.key_generator()
-c = r.cipher(8)
+input_ =  "1234567890123456789012345678901234567890abcdefghij"
+print("input = "+input_)
+c = r.cipher(input_)
 print(c)
 print(r.decipher(c))
