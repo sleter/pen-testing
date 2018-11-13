@@ -33,17 +33,28 @@ class RSA():
     def cipher(self, m):
         print("------------------------cipher")
         ascii_t = [ord(i) for i in m]
-        return [item ** self.e % self.n for item in ascii_t]
+        # return [item ** self.e % self.n for item in ascii_t]
+        return [self.power(item, self.e, self.n) for item in ascii_t]
     
     def decipher(self, c):
         print("------------------------decipher")
-        out = [item ** self.d % self.n for item in c]
+        # out = [item ** self.d % self.n for item in c]
+        out = [self.power(item, self.d, self.n) for item in c]
         return ''.join(chr(i) for i in out)
 
+    def power(self, x, y, p):
+        res = 1
+        x = x % p
+        while (y > 0):
+            if ((y & 1) == 1):
+                res = (res * x) % p
+            y = y >> 1 
+            x = (x * x) % p
+        return res
 
 r = RSA(1031, 2029)
 r.key_generator()
-input_ =  "1234567890123456789012345678901234567890abcdefghij"
+input_ =  "1234567890abcdefghij12345678901234567890abcdefghij"
 print("input = "+input_)
 c = r.cipher(input_)
 print(c)
