@@ -52,9 +52,9 @@ class RSA():
             x = (x * x) % p
         return res
 
-r = RSA(1031, 2029)
+r = RSA(100019, 170029)                                             #1031, 2029)
 r.key_generator()
-input_ =  "1234567890abcdefghij12345678901234567890abcdefghij"
+input_ =  "12345abcde"*5
 print("input = "+input_)
 c = r.cipher(input_)
 print(c)
