@@ -31,7 +31,7 @@ class DH:
     # https://stackoverflow.com/questions/40190849/efficient-finding-primitive-roots-modulo-n-using-python
     def primitiveRoots(self, modulo):
         coprime_set = {num for num in range(1, modulo) if gcd(num, modulo) == 1}
-        return [g for g in range(1, modulo) if coprime_set == {pow(g, powers, modulo) for powers in range(1, modulo)}]
+        return [g for g in range(1, modulo) if coprime_set == {self.power(g, powers, modulo) for powers in range(1, modulo)}]
 
     def power(self, x, y, p):
         res = 1
