@@ -7,17 +7,17 @@ class LSBSteg:
 
     def decode_image(self, pathToImage):
         image = Image.open(pathToImage)
+        # image = image.convert('RGB')
         R = image.split()[0]
         # G = image.split()[1]
         # B = image.split()[2]
-        text = ''
         binText=''
         counter = 0
         for i in range(image.size[0]):
             for j in range(image.size[1]):
                 if counter < self.textLen:
                     binText += bin(R.getpixel((i, j)))[-1]
-                    print(bin(R.getpixel((i, j))))
+                    # print(int(bin(R.getpixel((i, j))), 2))
                     counter+=1
                 else:                 
                     break
@@ -26,6 +26,7 @@ class LSBSteg:
         
     def encode_image(self, pathToImage, text, pathToSave):
         image = Image.open(pathToImage)
+        # image = image.convert('RGB')
         R = image.split()[0]
         G = image.split()[1]
         B = image.split()[2]
@@ -43,9 +44,9 @@ class LSBSteg:
                     # print(str(bin(R.getpixel((i, j)))) + text[0])
                     # greenPix = int(str(bin(G.getpixel((i, j)))[2:].zfill(8))[:-1] + text[1], 2)
                     # bluePix = int(str(bin(B.getpixel((i, j)))[2:].zfill(8))[:-1] + text[2], 2)
-                    pixels[i, j] = (254, G.getpixel((i, j)), B.getpixel((i, j)))
+                    pixels[i, j] = (redPix, G.getpixel((i, j)), B.getpixel((i, j)))
                     text = text[1:]  
-        encoded_image.save(pathToSave+'encoded_image.jpg')
+        encoded_image.save(pathToSave+'encoded_image.png')
 
     def text_to_binary(self, text):
         return ''.join(format(ord(x), 'b') for x in text)
@@ -57,8 +58,8 @@ class LSBSteg:
 
 def main():
     l = LSBSteg()
-    l.encode_image('/home/sleter/Pictures/Wallpapers/tvAVMw5.jpg', '1', '/home/sleter/Pictures/')
-    l.decode_image('/home/sleter/Pictures/encoded_image.jpg')
+    l.encode_image('/home/sleter/Pictures/Wallpapers/tvAVMw5.jpg', '123', '/home/sleter/Pictures/')
+    l.decode_image('/home/sleter/Pictures/encoded_image.png')
 
 if __name__ == '__main__':
     main()
