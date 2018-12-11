@@ -43,8 +43,10 @@ def y_for_x(x, _x, _y, p):
     for i in range(l):
         o = list(_x)
         cur = o.pop(i)
-        nums.append(pom(x - i for i in o))
-        d.append(pom(cur - i for i in o))
+        a = [x - i for i in o]
+        b = [cur - i for i in o]
+        nums.append(pom(a))
+        d.append(pom(b))
     den = pom(d)
     num = sum([modulo_div(nums[i] * den * _y[i] % p, d[i], p)for i in range(l)])
     out = gcd(den, p) * num
