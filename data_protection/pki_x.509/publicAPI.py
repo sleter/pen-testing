@@ -9,15 +9,15 @@ from cryptography.hazmat.backends import default_backend
 
 app = FlaskAPI(__name__)
 
-@app.route("/genc", methods=['GET', 'POST'])
+@app.route("/private/genc", methods=['GET', 'POST'])
 def genc():
     generate_client()
 
-@app.route("/crec", methods=['GET', 'POST'])
+@app.route("/private/crec", methods=['GET', 'POST'])
 def crec():
     create_cert()
 
-@app.route("/revl", methods=['GET', 'POST'])
+@app.route("/private/revl", methods=['GET', 'POST'])
 def revl():
     add_to_revoke_list()
 
