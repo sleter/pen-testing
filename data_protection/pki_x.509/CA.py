@@ -9,7 +9,7 @@ import datetime
 
 def create_cert():
     with open("client/csr.pem", "rb") as f:
-    certs = pem.parse(f.read())
+        certs = pem.parse(f.read())
 
     cert = certs[0].as_bytes()
 

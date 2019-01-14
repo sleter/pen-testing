@@ -44,4 +44,3 @@ def generate_client():
         f.write(csr.public_bytes(serialization.Encoding.PEM))
     # po tym CSR przekazywany jest do weryfikacji
 
-
